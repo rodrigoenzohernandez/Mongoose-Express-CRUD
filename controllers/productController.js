@@ -1,9 +1,11 @@
-const { update } = require("./../models/product");
 const Product = require("./../models/product");
 
 const productController = {
   async getProducts(req, res) {
-    const products = await Product.find({});
+
+    let condition;
+    req.query.category ? condition = { category: req.query.category } : condition = {}
+    const products = await Product.find(condition);
     res.send(products);
   },
   async getProductDetail(req, res) {
