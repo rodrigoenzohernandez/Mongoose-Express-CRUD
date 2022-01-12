@@ -1,3 +1,4 @@
+const { update } = require("./../models/product");
 const Product = require("./../models/product");
 
 const productController = {
@@ -19,18 +20,39 @@ const productController = {
     }
   },
   async createProduct(req, res) {
-
     const p = new Product(req.body);
-      
-      p.save()
-        .then((p) => res.send(p))
-        .catch((e) => {
-            res.status(400);
-            res.send(e)
-        });
+
+    p.save()
+      .then((p) => {
+        res.status(201);
+        res.send(p);
+      })
+      .catch((e) => {
+        res.status(400);
+        res.send(e);
+      });
   },
   async updateProduct(req, res) {
-    res.send("/WIP: update product");
+    const id = req.body._id;
+    const newDocument = req.body;
+
+    const options = {
+      new: true,
+      runValidators: true,
+    };
+
+    try {
+      const updated = await Product.findByIdAndUpdate(id, newDocument, options);
+
+      if (updated) res.send(updated);
+      else {
+        res.status(400);
+        res.send("No product was found with that ID, so nothing was updated");
+      }
+    } catch (error) {
+      res.status(400);
+      res.send(error);
+    }
   },
   async deleteProduct(req, res) {
     res.send("/WIP: delete product");
