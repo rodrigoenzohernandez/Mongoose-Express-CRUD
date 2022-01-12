@@ -19,7 +19,15 @@ const productController = {
     }
   },
   async createProduct(req, res) {
-    res.send("/WIP: create product");
+
+    const p = new Product(req.body);
+      
+      p.save()
+        .then((p) => res.send(p))
+        .catch((e) => {
+            res.status(400);
+            res.send(e)
+        });
   },
   async updateProduct(req, res) {
     res.send("/WIP: update product");
