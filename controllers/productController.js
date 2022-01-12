@@ -55,7 +55,18 @@ const productController = {
     }
   },
   async deleteProduct(req, res) {
-    res.send("/WIP: delete product");
+    try {
+      const deleted = await Product.findByIdAndRemove(req.body._id);
+
+      if (deleted) res.send(deleted);
+      else {
+        res.status(400);
+        res.send("No product was found with that ID, so nothing was deleted");
+      }
+    } catch (error) {
+      res.status(400);
+      res.send(error);
+    }
   },
 };
 
