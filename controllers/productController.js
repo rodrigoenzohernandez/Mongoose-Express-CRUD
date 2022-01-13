@@ -2,10 +2,15 @@ const Product = require("./../models/product");
 
 const productController = {
   async getProducts(req, res) {
+    const regexName = new RegExp(req.query.name, "i");
+    const regexCat = new RegExp(req.query.category, "i");
+    const filter = {
+      name: { $regex: regexName },
+      category: { $regex: regexCat },
+    };
 
-    let condition;
-    req.query.category ? condition = { category: req.query.category } : condition = {}
-    const products = await Product.find(condition);
+    const products = await Product.find(filter);
+
     res.send(products);
   },
   async getProductDetail(req, res) {
